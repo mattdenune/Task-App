@@ -52,10 +52,14 @@ userSchema.statics.findByCredentials = async (email, password) => {
     console.log('-User:', user)
     console.log('-Password:', password) 
     console.log('-Hash Password:', user.password)
-
-    const isMatch = await bcrypt.compare(password, user.password)
+    let isMatch
+    try {
+        isMatch = await bcrypt.compare(password, user.password)
+    } catch(e) {
+        console.log('isMatch Error:', e)
+    }
     
-    // had to do this to get around bug
+
     if (!isMatch) {
         throw new Error('Unable to login')
     }

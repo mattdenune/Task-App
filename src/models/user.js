@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
                 throw new Error('Email is invalid')
             }
         }
-    },
+    }, 
     password: {
         type: String,
         required: true,
@@ -49,14 +49,17 @@ userSchema.statics.findByCredentials = async (email, password) => {
     if (!user) {
         throw new Error('Unable to login')
     }
-    
+    console.log('-User:', user)
+    console.log('-Password:', password) 
+    console.log('-Hash Password:', user.password)
+
     const isMatch = await bcrypt.compare(password, user.password)
     
+    // had to do this to get around bug
     if (!isMatch) {
         throw new Error('Unable to login')
     }
 
-    console.log(user)
     return user
 }
 

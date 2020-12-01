@@ -24,7 +24,6 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true,
-        lowercase: true,
         validate(value) {
             if (value.length <= 6) {
                 throw new Error('Your password must be longer that six characters')
@@ -52,12 +51,9 @@ userSchema.statics.findByCredentials = async (email, password) => {
     console.log('-User:', user)
     console.log('-Password:', password) 
     console.log('-Hash Password:', user.password)
-    let isMatch
-    try {
-        isMatch = await bcrypt.compare(password, user.password)
-    } catch(e) {
-        console.log('isMatch Error:', e)
-    }
+   
+    const isMatch = await bcrypt.compare(password, user.password)
+    
     
 
     if (!isMatch) {
